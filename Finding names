@@ -1,0 +1,127 @@
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
+
+public class Nimet_listaus {
+
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Nimet_listaus ohjelma = new Nimet_listaus();
+
+		String[] arvot = new String[] {
+
+				"Ville:24", "Anna:6", "Antti:22", "Sanna:5", "Mikko:19", "Minna:5", "Timo:18", "Satu:5", "Tuomas:16",
+				"Tiina:5", "Tero:15", "Kati:5", "Sami:15", "Henna:4", "Mika:12", "Liisa:4", "Janne:12", "Paula:4",
+				"Petri:11", "Suvi:4"
+
+		};
+
+		System.out.println("\n1. List names and amounts, order by amount, most popular first");
+		System.out.println("2. List names in alphabetical order");
+		System.out.println("3. Return the total amount of all the names");
+		System.out.println("4. Return the amount of the name given as a parameter");
+		System.out.print("\nPick a number(1-4): ");
+		int chosenNumber = input.nextInt();
+
+		switch (chosenNumber) {
+		case 1: {
+			ohjelma.namesAndAmounts(arvot);
+			break;
+		}
+		case 2: {
+			ohjelma.listNamesInOrder(arvot);
+			break;
+		}
+		case 3: {
+			ohjelma.amountOfNames(arvot);
+			break;
+		}
+		case 4: {
+			amountOfGivenName(arvot);
+			break;
+		}
+		default:
+			System.out.println("Number you have called is not recognised");
+		}
+
+	}
+
+	public void amountOfNames(String[] arvot) {
+
+		int summa = 0;
+
+		for (int i = 0; i < arvot.length; i++) {
+			String nimet = arvot[i];
+
+			String[] osat = nimet.split(":");
+			String amount = osat[1];
+			int maara = Integer.parseInt(amount);
+			summa = summa + maara;
+
+		}
+
+		System.out.println("Sum of all names was " + summa);
+
+	}
+
+	public void listNamesInOrder(String[] arvot) {
+		Arrays.sort(arvot);
+		System.out.println();
+
+		for (int i = 0; i < arvot.length; i++) {
+			String nimet = arvot[i];
+
+			String[] osat = nimet.split(":");
+			String firstNames = osat[0];
+
+			System.out.println(firstNames);
+		}
+
+	}
+
+	public static void amountOfGivenName(String[] arvot) {
+		Scanner input = new Scanner(System.in);
+		String answer = "";
+
+		System.out.print("Give me a name you are looking for? ");
+		String givenName = input.next();
+
+		for (int i = 0; i < arvot.length; i++) {
+			String nimet = arvot[i];
+
+			String[] osat = nimet.split(":");
+			String etuNimet = osat[0];
+
+			if (givenName.matches(etuNimet)) {
+				answer = osat[1];
+
+			}
+
+		}
+		System.out.println("Name " + givenName + " was found " + answer + " times!");
+
+	}
+
+	public void namesAndAmounts(String[] arvot) {
+		List<String> strings = Arrays.asList(arvot);
+
+		Collections.sort(strings, new Comparator<String>() {
+			public int compare(String o1, String o2) {
+				return extractInt(o1) - extractInt(o2);
+			}
+
+			int extractInt(String s) {
+				String num = s.replaceAll("\\D", "");
+				
+				return num.isEmpty() ? 0 : Integer.parseInt(num);
+			}
+
+		});
+		
+		Collections.sort(strings, Collections.reverseOrder());
+		System.out.println(strings);
+	}
+}
